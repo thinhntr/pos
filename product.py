@@ -11,6 +11,8 @@ class Product:
     @name.setter
     def name(self, value: str):
         value = ' '.join(value.strip().split())
+        if value == '':
+            raise ValueError("name can't be an empty string")
         self.__name = value
 
     @property
@@ -19,6 +21,8 @@ class Product:
 
     @price.setter
     def price(self, value: Union[int, str]):
+        if value == '':
+            raise ValueError("price can't be an empty string")
         if isinstance(value, int):
             self.__price = value
         else:

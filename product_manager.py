@@ -1,15 +1,17 @@
-import json
 from typing import List, Optional, Union
+
+import json
 
 from utils import dp_lcs
 from utils import get_choice
+from utils import rlinput
 from product import Product
 from product import encode_product, decode_product
 
 
 class ProductManager:
     @property
-    def n_products(self) -> int:
+    def count(self) -> int:
         return len(self.products)
 
     def __init__(self):
@@ -33,9 +35,9 @@ class ProductManager:
             return []
 
         if not include_name_list:
-            return [i for i in range(self.n_products) if lengths[i] == max_len]
+            return [i for i in range(self.count) if lengths[i] == max_len]
 
-        return [[i, self.products[i].name] for i in range(self.n_products) if lengths[i] == max_len]
+        return [[i, self.products[i].name] for i in range(self.count) if lengths[i] == max_len]
 
     def add_product(self, name: str, price: Union[int, str]):
         """
@@ -61,7 +63,15 @@ class ProductManager:
             else:
                 print("Skipped")
 
-    def modify_product(self, index, new_name, new_price):
+    def modify_product(self, index: int, new_name="", new_price=""):
+        if not isinstance(index, int):
+            print("Invalid index")
+            return
+
+        if not (0 <= index and index < self.count):
+            print("index out of range")
+            return
+        print(f"Chosen product: {self.products[index]}")
         options = [
             ["r", "Update name"],
             ["p", "Update price"],
@@ -82,17 +92,33 @@ class ProductManager:
         else:
             print("Skipped")
 
-    def change_product_name(self, index: int, new_name: str):
+    def change_product_name(self, index: int, new_name: str = ""):
         """
         Change product's name at index
         """
+        while new_name == "":
+            new_name = rlinput("New name: ", self.products[index].name)
+        
         self.products[index].name = new_name
 
-    def change_product_price(self, index: int, new_price: int):
+    def change_product_price(self, index: int, new_price: int = ""):
         """
         Change product's price at index
         """
+        while new_price == "":
+            new_price = rlinput("New price: ", self.products[index].price)
+        
         self.products[index].price = new_price
+
+    def delete(self):
+        """
+        CLI for remove function
+        """
+        index = input("Enter product's index: ").strip()
+        if not index.isnumeric():
+            print("Invalid index")
+        else:
+            self.remove(int(index))
 
     def remove(self, index: int):
         """
@@ -106,16 +132,24 @@ class ProductManager:
         If indices is None then print all products available
         """
         if indices is None:
-            indices = range(self.n_products)
+            indices = range(self.count)
 
         for index in indices:
             result = self.products[index].name if nameonly else self.products[index]
-            print(f"{index}) {result}")
+            print(f"    {index}) {result}")
 
     def load_from_file(self, filename: str = "price_list.json"):
-        with open(filename, "r") as price_list:
-            self.products = json.load(price_list, object_hook=decode_product)
+        try:
+            with open(filename, "r") as price_list:
+                self.products = json.load(
+                    price_list, object_hook=decode_product)
+                print(f'Data loaded from {filename}')
+        except FileNotFoundError:
+            self.save_to_file(filename)
 
     def save_to_file(self, filename: str = "price_list.json"):
+        self.products.sort(key=lambda p: (p.name, p.price))
+        
         with open(filename, "w") as price_list:
             json.dump(self.products, price_list, default=encode_product)
+            print(f'Data saved to {filename}')

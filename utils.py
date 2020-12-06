@@ -1,5 +1,7 @@
 from typing import List, Union
 
+import readline
+
 
 def lcs(s1, s2, len1, len2):
     if 0 in (len1, len2):
@@ -47,14 +49,22 @@ def construct_choices(choices: List[Union[str, int]], contents: List[str]) -> Li
     return [option for option in zip(choices, contents)]
 
 
+def rlinput(prompt, prefill=''):
+    readline.set_startup_hook(lambda: readline.insert_text(prefill))
+    try:
+        return input(prompt)
+    finally:
+        readline.set_startup_hook()
+
+
 def get_choice(options: List[List], title: str = "Choose one of these") -> Union[str, int, None]:
     print(title)
 
     valid_choices = ["c"]
     for option in options:
-        print(f"{option[0]}) {option[1]}")
-        valid_choices.append(option[0])
-    print("c) Cancel")
+        print(f"    {option[0]}) {option[1]}")
+        valid_choices.append(str(option[0]))
+    print("    c) Cancel")
 
     choice = input("Your choice: ").strip()
 

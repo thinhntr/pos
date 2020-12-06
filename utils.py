@@ -1,4 +1,8 @@
 
+from _typeshed import NoneType
+from typing import List, Tuple, Union
+
+
 def lcs(s1, s2, len1, len2):
     if 0 in (len1, len2):
         return 0
@@ -31,29 +35,33 @@ def dp_lcs(X, Y):
     return L[m][n]
 
 
-def search(s1, arr):
-    s1 = s1.lower()
+def clrscr():
+    print('\n' * 100)
 
-    if not isinstance(arr, list):
-        arr = list(arr)
 
-    indices_of_len = {}
-    max_len = 0
+def construct_choices(choices: List[Union[str, int]], contents: List[str]) -> List[List]:
+    """
+    Return a list of [choice, content] for each choices and contents
+    """
+    if len(choices) != len(contents):
+        raise ValueError("len of choices and contents doesn't match")
 
-    for i, s2 in enumerate(arr):
-        current_len = dp_lcs(s1, s2.lower())
-        max_len = max(max_len, current_len)
-        try:
-            indices_of_len[current_len].append(i)
-        except KeyError:
-            indices_of_len[current_len] = [i]
+    return [option for option in zip(choices, contents)]
 
-    names = []
 
-    if max_len == 0:
-        return names
 
-    for i in indices_of_len[max_len]:
-        names.append(arr[i])
+def get_choice(options: List[List], title: str = "Choose one of these") -> Union[str, int, NoneType]:
+    print(title)
 
-    return names
+    valid_choices = ["c"]
+    for option in options:
+        print(f"{option[0]}) {option[1]}")
+        valid_choices.append(option[0])
+    print("c) Cancel")
+
+    choice = input("Your choice: ").strip()
+
+    if choice == "c" or choice not in valid_choices:
+        return None
+
+    return int(choice) if choice.isnumeric() else choice

@@ -1,6 +1,4 @@
-
-from _typeshed import NoneType
-from typing import List, Tuple, Union
+from typing import List, Union
 
 
 def lcs(s1, s2, len1, len2):
@@ -49,8 +47,7 @@ def construct_choices(choices: List[Union[str, int]], contents: List[str]) -> Li
     return [option for option in zip(choices, contents)]
 
 
-
-def get_choice(options: List[List], title: str = "Choose one of these") -> Union[str, int, NoneType]:
+def get_choice(options: List[List], title: str = "Choose one of these") -> Union[str, int, None]:
     print(title)
 
     valid_choices = ["c"]

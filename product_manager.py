@@ -12,7 +12,24 @@ from product import encode_product, decode_product
 class ProductManager:
     @property
     def count(self) -> int:
+        """
+        Number of products in the current database
+        """
         return len(self.products)
+
+    @property
+    def all_product_names(self) -> List[str]:
+        """
+        List of all products' names
+        """
+        return [product.name for product in self.products]
+
+    @property
+    def all_product_prices(self) -> List[int]:
+        """
+        List of all products' prices
+        """
+        return [product.price for product in self.products]
 
     def __init__(self):
         self.products: List[Product] = []

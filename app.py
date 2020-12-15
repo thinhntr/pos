@@ -43,7 +43,14 @@ if __name__ == "__main__":
                 print("Invalid command")
             else:
                 name, price = new_product
-                products.add_product(name, price)
+
+                try:
+                    new_price = to_valid_price(price)
+                except RuntimeError:
+                    print("Invalid price ({price})")
+                    continue
+
+                products.add_product(name, new_price)
 
         elif command == '/save':
             products.save_to_file(database_file_path)

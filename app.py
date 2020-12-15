@@ -49,7 +49,7 @@ if __name__ == "__main__":
                 except RuntimeError:
                     print("Invalid price ({price})")
                     continue
-
+                # FIXME: Check product name before add to product
                 products.add_product(name, new_price)
 
         elif command == '/save':

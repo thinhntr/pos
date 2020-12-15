@@ -1,12 +1,10 @@
-from product_manager import ProductManager as PM
+from product_manager import ProductManager
 from utils import is_not_valid_input, clrscr, to_valid_price
 
 if __name__ == "__main__":
     clrscr()
 
-    database_file_path = "price_list.json"
-    products = PM()
-    products.load_from_file(database_file_path)
+    product_manager = ProductManager()
 
     while True:
         command = input(">>> ").strip()
@@ -29,14 +27,14 @@ if __name__ == "__main__":
             print("[product_name]=[product_price]: Add product")
 
         elif command == "/all":
-            products.show()
+            product_manager.show()
 
         elif command == "/del":
-            products.delete()
+            product_manager.delete()
 
         elif command.isnumeric():
             index = int(command)
-            products.modify_product(index)
+            product_manager.modify_product(index)
 
         elif "=" in command:
             new_product = command.split("=")
@@ -55,13 +53,13 @@ if __name__ == "__main__":
                     print(f"Can't convert{price} to a valid value")
                     continue
 
-                products.add_product(name, new_price)
+                product_manager.add_product(name, new_price)
 
         elif command == "/save":
-            products.save_to_file(database_file_path)
+            product_manager.save_to_file(database_file_path)
 
         elif len(command) != 0:
             name = command
-            products.show(products.search(command))
+            product_manager.show(product_manager.search(command))
 
-    products.save_to_file(database_file_path)
+    product_manager.save_to_file(database_file_path)

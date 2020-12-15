@@ -4,39 +4,47 @@ import json
 
 
 class Product:
+    """
+    Product's information
+    """
+
     @property
     def name(self) -> str:
         return self.__name
 
     @name.setter
     def name(self, value: str):
-        value = ' '.join(value.strip().split())
-        if value == '':
-            raise ValueError("name can't be an empty string")
+        """Set product's name
+
+        Raises
+        ------
+        ValueError
+            If `value` is an empty string
+        """
+        value = " ".join(value.strip().split())
+        if value == "":
+            raise ValueError("Product's name can't be an empty string")
         self.__name = value
+        return True
 
     @property
     def price(self) -> int:
         return self.__price
 
     @price.setter
-    def price(self, value: Union[int, str]):
-        if value == '':
-            raise ValueError("price can't be an empty string")
-        if isinstance(value, int):
-            self.__price = value
-        else:
-            if not isinstance(value, str):
-                value_type = value.__class__.__name__
-                raise TypeError(f"{value_type} is invalid")
+    def price(self, value: int):
+        """Set product's price
 
-            value = ''.join(value.strip().split())
-            if not value.isnumeric():
-                raise ValueError("Can't convert value to int")
+        Raises
+        ------
+        ValueError
+            If `value` is less than 0
+        """
+        if value < 0:
+            raise ValueError(f"Product's price can't be less than 0 ({value} < 0)")
+        self.__price = value
 
-            self.__price = int(value)
-
-    def __init__(self, name: str, price: str):
+    def __init__(self, name: str, price: int):
         self.name = name
         self.price = price
 
@@ -47,12 +55,12 @@ class Product:
         return f"Product('{self.name}', {self.price})"
 
 
-def encode_product(o: Product):
+def encode_product(o):
     if isinstance(o, Product):
         return {"name": o.name, "price": o.price}
 
     return json.JSONEncoder().default(o)
 
 
-def decode_product(o: Dict[str, int]):
+def decode_product(o):
     return Product(o["name"], o["price"])

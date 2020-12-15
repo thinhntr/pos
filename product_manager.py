@@ -196,6 +196,7 @@ class ProductManager:
                 self.products = json.load(price_list, object_hook=decode_product)
                 print(f"Data loaded from {filename}")
         except FileNotFoundError:
+            print(f"{filename} created.")
             self.save_to_file(filename)
 
     def save_to_file(self, filename: str = "price_list.json"):

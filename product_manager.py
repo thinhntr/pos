@@ -22,6 +22,9 @@ class ProductManager:
         """
         return len(self.products)
 
+    def __init__(self):
+        self.products: List[Product] = []
+
     def get_products_names(self, indices: Optional[Iterable[int]]) -> List[str]:
         """
         Returns
@@ -48,8 +51,7 @@ class ProductManager:
 
         return [self.products[i].price for i in indices]
 
-    def __init__(self):
-        self.products: List[Product] = []
+    
 
     def search(self, name: str) -> List[int]:
         """

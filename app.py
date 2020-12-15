@@ -1,20 +1,20 @@
 from product_manager import ProductManager as PM
-from utils import clrscr
+from utils import clrscr, to_valid_price
 
 if __name__ == "__main__":
     clrscr()
 
-    database_file_path = 'price_list.json'
+    database_file_path = "price_list.json"
     products = PM()
     products.load_from_file(database_file_path)
 
     while True:
         command = input(">>> ").strip()
 
-        if command == '/exit':
+        if command == "/exit":
             break
 
-        if command == '/clrscr':
+        if command == "/clrscr":
             clrscr()
 
         elif command == "/help":
@@ -28,17 +28,18 @@ if __name__ == "__main__":
             print("[query_name]: Search products with similar name")
             print("[product_name]=[product_price]: Add product")
 
+        elif command == "/all":
             products.show()
 
-        elif command == '/del':
+        elif command == "/del":
             products.delete()
 
         elif command.isnumeric():
             index = int(command)
             products.modify_product(index)
 
-        elif '=' in command:
-            new_product = command.split('=')
+        elif "=" in command:
+            new_product = command.split("=")
             if len(new_product) != 2:
                 print("Invalid command")
             else:
@@ -52,7 +53,7 @@ if __name__ == "__main__":
                 # FIXME: Check product name before add to product
                 products.add_product(name, new_price)
 
-        elif command == '/save':
+        elif command == "/save":
             products.save_to_file(database_file_path)
 
         elif len(command) != 0:

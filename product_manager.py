@@ -1,5 +1,3 @@
-from typing import List, Optional, Union
-
 import json
 from typing import Iterable, List, Optional
 from product import Product, decode_product, encode_product
@@ -33,7 +31,7 @@ class ProductManager:
             list of all products' names at indices
         """
         if indices is None:
-        return [product.name for product in self.products]
+            return [product.name for product in self.products]
 
         return [self.products[i].name for i in indices]
 
@@ -46,7 +44,7 @@ class ProductManager:
             list of all products' prices at indices
         """
         if indices is None:
-        return [product.price for product in self.products]
+            return [product.price for product in self.products]
 
         return [self.products[i].price for i in indices]
 
@@ -71,51 +69,53 @@ class ProductManager:
         if max_len == 0:
             return []
 
-        if not include_name_list:
-            return [i for i in range(self.count) if lengths[i] == max_len]
+        return [i for i in range(self.count) if lengths[i] == max_len]
 
-        return [[i, self.products[i].name] for i in range(self.count) if lengths[i] == max_len]
-
-    def add_product(self, name: str, price: Union[int, str]):
+    def add_product(self, name: str, price: int):
         """
         Add product to the database"
         """
-        matched_products = self.search(name, include_name_list=True)
+        similar_product_indices = self.search(name)
 
-        if len(matched_products) == 0:
+        if len(similar_product_indices) == 0:
             self.products.append(Product(name, price))
 
         else:
-            options = [
-                *matched_products,
-                ["n", "Add as new product"]
-            ]
+            similar_product_names = self.get_products_names(similar_product_indices)
+            choices = construct_poll(
+                [*similar_product_indices, "n"], 
+                [*similar_product_names, "Add as new product"]
+            )
 
-            choice = get_choice(options, "Similar products")
+            choice = get_choice(choices, "Similar products")
 
             if choice == "n":
                 self.products.append(Product(name, price))
-            elif isinstance(choice,  int):
+            elif isinstance(choice, int):
                 self.modify_product(choice, name, price)
             else:
                 print("Skipped")
 
-    def modify_product(self, index: int, new_name="", new_price=""):
+    def modify_product(
+        self, index: int, new_name: str = "", new_price: Optional[int] = None
+    ):
         if not isinstance(index, int):
-            print("Invalid index")
+            print(f"Invalid index ({index})")
             return
 
         if not (0 <= index and index < self.count):
-            print("index out of range")
+            print(f"Index out of range ({index})")
             return
+
         print(f"Chosen product: {self.products[index]}")
-        options = [
-            ["r", "Update name"],
-            ["p", "Update price"],
-            ["b", "Update name and price"],
-            ["d", "Delete this product"]
+
+        choices = [
+            ("r", "Update name"),
+            ("p", "Update price"),
+            ("b", "Update name and price"),
+            ("d", "Delete this product"),
         ]
-        choice = get_choice(options)
+        choice = get_choice(choices)
 
         if choice == "r":
             self.change_product_name(index, new_name)
@@ -135,16 +135,23 @@ class ProductManager:
         """
         while new_name == "":
             new_name = rlinput("New name: ", self.products[index].name)
-        
+
         self.products[index].name = new_name
 
-    def change_product_price(self, index: int, new_price: int = ""):
+    def change_product_price(self, index: int, new_price: Optional[int] = None):
         """
         Change product's price at index
         """
-        while new_price == "":
-            new_price = rlinput("New price: ", self.products[index].price)
-        
+        while new_price is None:
+            try:
+                new_price = to_valid_price(
+                    rlinput("New price: ", str(self.products[index].price))
+                )
+            except RuntimeError:
+                continue
+            else:
+                break
+
         self.products[index].price = new_price
 
     def delete(self):
@@ -163,10 +170,15 @@ class ProductManager:
         """
         self.products.pop(index)
 
-    def show(self, indices: Optional[List[int]] = None, nameonly=False):
+    def show(self, indices: Optional[Iterable[int]] = None, nameonly: bool = False):
         """
         Print products at indices.
         If indices is None then print all products available
+
+        Parameters
+        ----------
+        nameonly : bool
+            If nameonly is False then print product's name and price
         """
         if indices is None:
             indices = range(self.count)
@@ -176,17 +188,22 @@ class ProductManager:
             print(f"    {index}) {result}")
 
     def load_from_file(self, filename: str = "price_list.json"):
+        """
+        Load products' information from `filename` to this instance
+        """
         try:
             with open(filename, "r") as price_list:
-                self.products = json.load(
-                    price_list, object_hook=decode_product)
-                print(f'Data loaded from {filename}')
+                self.products = json.load(price_list, object_hook=decode_product)
+                print(f"Data loaded from {filename}")
         except FileNotFoundError:
             self.save_to_file(filename)
 
     def save_to_file(self, filename: str = "price_list.json"):
+        """
+        Save products' information from this instance to `filename`
+        """
         self.products.sort(key=lambda p: (p.name, p.price))
-        
+
         with open(filename, "w") as price_list:
             json.dump(self.products, price_list, default=encode_product)
-            print(f'Data saved to {filename}')
+            print(f"Data saved to {filename}")

@@ -56,10 +56,10 @@ if __name__ == "__main__":
                 product_manager.add_product(name, new_price)
 
         elif command == "/save":
-            product_manager.save_to_file(database_file_path)
+            product_manager.save_to_file()
 
         elif len(command) != 0:
             name = command
             product_manager.show(product_manager.search(command))
 
-    product_manager.save_to_file(database_file_path)
+    product_manager.save_to_file()

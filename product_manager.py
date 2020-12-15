@@ -1,12 +1,9 @@
 from typing import List, Optional, Union
 
 import json
-
-from utils import dp_lcs
-from utils import get_choice
-from utils import rlinput
-from product import Product
-from product import encode_product, decode_product
+from typing import Iterable, List, Optional
+from product import Product, decode_product, encode_product
+from utils import construct_poll, dp_lcs, get_choice, rlinput, to_valid_price
 
 
 class ProductManager:

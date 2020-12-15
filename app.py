@@ -17,7 +17,17 @@ if __name__ == "__main__":
         if command == '/clrscr':
             clrscr()
 
-        elif command == '/all':
+        elif command == "/help":
+            print("/help: Display this help menu")
+            print("/exit: Quit program")
+            print("/clrscr: Clear screen")
+            print("/all: Show all products")
+            print("/del: Delete a product")
+            print("/save: Save all products down to hardrive")
+            print("[index]: Display information about product at index")
+            print("[query_name]: Search products with similar name")
+            print("[product_name]=[product_price]: Add product")
+
             products.show()
 
         elif command == '/del':

@@ -1,5 +1,5 @@
 from product_manager import ProductManager as PM
-from utils import clrscr, to_valid_price
+from utils import is_not_valid_input, clrscr, to_valid_price
 
 if __name__ == "__main__":
     clrscr()
@@ -45,12 +45,16 @@ if __name__ == "__main__":
             else:
                 name, price = new_product
 
+                if is_not_valid_input(name):
+                    print(f"Invalid name ({name})")
+                    continue
+
                 try:
                     new_price = to_valid_price(price)
                 except RuntimeError:
                     print(f"Can't convert{price} to a valid value")
                     continue
-                # FIXME: Check product name before add to product
+
                 products.add_product(name, new_price)
 
         elif command == "/save":

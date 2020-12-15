@@ -53,7 +53,7 @@ class ProductManager:
     def __init__(self):
         self.products: List[Product] = []
 
-    def search(self, name: str, include_name_list: bool = False) -> Union[List[int], List[List]]:
+    def search(self, name: str) -> List[int]:
         """
         Return products' indices with similar name.
         If include_name_list is True then return their corresponding names
@@ -63,6 +63,7 @@ class ProductManager:
         lengths: List[int] = []
 
         for product in self.products:
+            # FIXME: Change algorithm
             current_len = dp_lcs(name, product.name.lower())
             lengths.append(current_len)
             max_len = max(max_len, current_len)

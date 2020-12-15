@@ -39,6 +39,11 @@ def clrscr():
     print("\n" * 100)
 
 
+def is_not_valid_input(value: str) -> bool:
+    """Return True if `value` is not valid to set to a product"""
+    return " ".join(value.strip().split()) == ""
+
+
 def to_valid_price(value: Union[str, int]) -> int:
     """Convert `value` to int type
 

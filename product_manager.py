@@ -36,10 +36,19 @@ class ProductManager:
         return [product.name for product in self.products]
 
         return [self.products[i].name for i in indices]
+
+    def get_products_prices(self, indices: Optional[Iterable[int]]) -> List[int]:
         """
-        List of all products' prices
+        Returns
+        -------
+        List[str]
+            List of all products' prices available if indices is None else
+            list of all products' prices at indices
         """
+        if indices is None:
         return [product.price for product in self.products]
+
+        return [self.products[i].price for i in indices]
 
     def __init__(self):
         self.products: List[Product] = []

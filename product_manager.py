@@ -1,7 +1,10 @@
 import json
+import os
 from typing import Iterable, List, Optional
 from product import Product, decode_product, encode_product
 from utils import construct_poll, dp_lcs, get_choice, rlinput, to_valid_price
+
+DEFAULT_PRICELIST_PATH = "./price_list.json"
 
 
 class ProductManager:
@@ -22,10 +25,15 @@ class ProductManager:
         """
         return len(self.products)
 
-    def __init__(self):
+    def __init__(self, database_filename: Optional[str] = None):
         self.products: List[Product] = []
 
-    def get_products_names(self, indices: Optional[Iterable[int]]) -> List[str]:
+        if database_filename is not None:
+            self.load_from_file(database_filename)
+        elif os.path.exists(DEFAULT_PRICELIST_PATH):
+            self.load_from_file()
+
+    def get_products_names(self, indices: Optional[Iterable[int]] = None) -> List[str]:
         """
         Returns
         -------
@@ -38,7 +46,7 @@ class ProductManager:
 
         return [self.products[i].name for i in indices]
 
-    def get_products_prices(self, indices: Optional[Iterable[int]]) -> List[int]:
+    def get_products_prices(self, indices: Optional[Iterable[int]] = None) -> List[int]:
         """
         Returns
         -------
@@ -50,8 +58,6 @@ class ProductManager:
             return [product.price for product in self.products]
 
         return [self.products[i].price for i in indices]
-
-    
 
     def search(self, name: str) -> List[int]:
         """
@@ -85,8 +91,8 @@ class ProductManager:
         else:
             similar_product_names = self.get_products_names(similar_product_indices)
             choices = construct_poll(
-                [*similar_product_indices, "n"], 
-                [*similar_product_names, "Add as new product"]
+                [*similar_product_indices, "n"],
+                [*similar_product_names, "Add as new product"],
             )
 
             choice = get_choice(choices, "Similar products")
@@ -189,7 +195,7 @@ class ProductManager:
             result = self.products[index].name if nameonly else self.products[index]
             print(f"    {index}) {result}")
 
-    def load_from_file(self, filename: str = "price_list.json"):
+    def load_from_file(self, filename: str = DEFAULT_PRICELIST_PATH):
         """
         Load products' information from `filename` to this instance
         """
@@ -198,10 +204,14 @@ class ProductManager:
                 self.products = json.load(price_list, object_hook=decode_product)
                 print(f"Data loaded from {filename}")
         except FileNotFoundError:
-            print(f"{filename} created.")
-            self.save_to_file(filename)
+            choices = construct_poll(["y", "n"], [f"Create {filename}", "Abort"])
 
-    def save_to_file(self, filename: str = "price_list.json"):
+            choice = get_choice(choices)
+
+            if choice == "y":
+                self.save_to_file(filename)
+
+    def save_to_file(self, filename: str = DEFAULT_PRICELIST_PATH):
         """
         Save products' information from this instance to `filename`
         """

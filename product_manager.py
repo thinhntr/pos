@@ -24,15 +24,18 @@ class ProductManager:
         """
         return len(self.products)
 
-    @property
-    def all_product_names(self) -> List[str]:
+    def get_products_names(self, indices: Optional[Iterable[int]]) -> List[str]:
         """
-        List of all products' names
+        Returns
+        -------
+        List[str]
+            List of all products' names available if indices is None else
+            list of all products' names at indices
         """
+        if indices is None:
         return [product.name for product in self.products]
 
-    @property
-    def all_product_prices(self) -> List[int]:
+        return [self.products[i].name for i in indices]
         """
         List of all products' prices
         """

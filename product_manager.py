@@ -7,6 +7,16 @@ from utils import construct_poll, dp_lcs, get_choice, rlinput, to_valid_price
 
 
 class ProductManager:
+    """
+    Create an object to manage products
+
+    Attributes
+    ----------
+    count
+    products : List[Product]
+        List of all products' information
+    """
+
     @property
     def count(self) -> int:
         """

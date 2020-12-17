@@ -80,9 +80,7 @@ class ProductManager:
         return [i for i in range(self.count) if lengths[i] == max_len]
 
     def add_product(self, name: str, price: int):
-        """
-        Add product to the database"
-        """
+        """Add product to the database"""
         similar_product_indices = self.search(name)
 
         if len(similar_product_indices) == 0:

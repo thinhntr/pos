@@ -1,6 +1,10 @@
 import json
 import os
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Optional, Tuple
+
+from fuzzywuzzy import fuzz
+from unidecode import unidecode
+
 from product import Product, decode_product, encode_product
 from utils import construct_poll, dp_lcs, get_choice, rlinput, to_valid_price
 
@@ -59,25 +63,35 @@ class ProductManager:
 
         return [self.products[i].price for i in indices]
 
-    def search(self, name: str) -> List[int]:
+    def search(self, keyword: str) -> List[int]:
+        """Search for product with name similar to `keyword`
         """
-        Return products' indices with similar name.
-        If include_name_list is True then return their corresponding names
-        """
-        name = name.lower()
-        max_len = 0
-        lengths: List[int] = []
+        candidates: List[Tuple[int, int, int]] = []
 
-        for product in self.products:
-            # FIXME: Change algorithm
-            current_len = dp_lcs(name, product.name.lower())
-            lengths.append(current_len)
-            max_len = max(max_len, current_len)
+        for i in range(self.count):
+            product_name = self.products[i].name
 
-        if max_len == 0:
-            return []
+            # Similarity score between `keyword` and `product_name`
+            # when converting both of them into ascii chars
+            score1 = fuzz.token_set_ratio(unidecode(keyword), unidecode(product_name))
 
-        return [i for i in range(self.count) if lengths[i] == max_len]
+            # Similarity scrore between `keyword` and `product_name`
+            # when not converting them ino ascii chars
+            score2 = fuzz.token_set_ratio(keyword, product_name, force_ascii=False)
+
+            if score1 >= 50 or score2 >= 50:
+                candidate = (score1 * score2, score1, i)
+                candidates.append(candidate)
+
+        candidates.sort(key=lambda e: e[:2], reverse=True)
+
+        max_score1 = candidates[0][1]
+
+        return [
+            candidates[i][-1]
+            for i in range(len(candidates))
+            if max_score1 - candidates[i][1] <= 20
+        ]
 
     def add_product(self, name: str, price: int):
         """Add product to the database"""

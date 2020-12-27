@@ -85,13 +85,16 @@ class ProductManager:
 
         candidates.sort(key=lambda e: e[:2], reverse=True)
 
-        max_score1 = candidates[0][1]
+        if len(candidates) > 0:
+            max_score1 = candidates[0][1]
 
-        return [
-            candidates[i][-1]
-            for i in range(len(candidates))
-            if max_score1 - candidates[i][1] <= 20
-        ]
+            return [
+                candidates[i][-1]
+                for i in range(len(candidates))
+                if max_score1 - candidates[i][1] <= 20
+            ]
+        
+        return []
 
     def add_product(self, name: str, price: int):
         """Add product to the database"""

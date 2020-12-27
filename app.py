@@ -50,7 +50,7 @@ if __name__ == "__main__":
                 try:
                     new_price = to_valid_price(price)
                 except RuntimeError:
-                    print(f"Can't convert{price} to a valid value")
+                    print(f"Can't convert {price} to a valid value")
                     continue
 
                 product_manager.add_product(name, new_price)

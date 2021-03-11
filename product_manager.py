@@ -233,5 +233,5 @@ class ProductManager:
         self.products.sort(key=lambda p: (p.name, p.price))
 
         with open(filename, "w") as price_list:
-            json.dump(self.products, price_list, default=encode_product)
+            json.dump(self.products, price_list, default=encode_product, indent=2)
             print(f"Data saved to {filename}")

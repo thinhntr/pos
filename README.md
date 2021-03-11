@@ -1,10 +1,4 @@
-# Point Of Sale
-
-- main.py
-- product.py: Product class to store name and price
-- product_manager.py: Manage list of products
-- utils.py: misc. tool
-- price_list.json: product's prices
+# Products' prices manager
 
 ## Install dependencies
 
@@ -31,3 +25,9 @@
 ## For development
 
 Install mypy and black: `pip install mypy black`
+
+- main.py: Main app
+- product.py: Contain `Product` class to store names and prices
+- product_manager.py: Manage list of products
+- utils.py: misc. tools
+- price_list.json: product's prices database

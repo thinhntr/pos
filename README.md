@@ -4,7 +4,7 @@ An app to manage products' prices written in python
 
 ## Install dependencies
 
-`pip install -r requirements`
+`pip install -r requirements.txt`
 
 ## How to use
 

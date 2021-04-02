@@ -4,6 +4,18 @@
     "price": 18000
   },
   {
+    "name": "b\u00e1nh lays v\u1ecb t\u1ea3o bi\u1ec3n nori",
+    "price": 6000
+  },
+  {
+    "name": "b\u00e1nh nabati",
+    "price": 6000
+  },
+  {
+    "name": "b\u00e1nh oreo",
+    "price": 15000
+  },
+  {
     "name": "b\u00e1nh snack b\u00ed \u0111\u1ecf",
     "price": 2000
   },
@@ -37,7 +49,7 @@
   },
   {
     "name": "b\u00ecnh n\u01b0\u1edbc v\u0129nh h\u1ea3o 20l",
-    "price": 42000
+    "price": 43000
   },
   {
     "name": "b\u0103ng keo trong l\u1edbn",
@@ -172,10 +184,6 @@
     "price": 5000
   },
   {
-    "name": "m\u00ec L\u1ea9u Th\u00e1i h\u01b0\u01a1ng v\u1ecb t\u00f4m",
-    "price": 6500
-  },
-  {
     "name": "m\u00ec chay v\u1ecb n\u1ea5m",
     "price": 4000
   },
@@ -194,6 +202,10 @@
   {
     "name": "m\u00ec gi\u1ea5y miliket sa t\u1ebf",
     "price": 3500
+  },
+  {
+    "name": "m\u00ec g\u00f3i L\u1ea9u Th\u00e1i h\u01b0\u01a1ng v\u1ecb t\u00f4m",
+    "price": 6500
   },
   {
     "name": "m\u00ec g\u1ea5u \u0111\u1ecf",
@@ -324,6 +336,14 @@
     "price": 26000
   },
   {
+    "name": "s\u1eefa h\u1ed9p TH (1 h\u1ed9p)",
+    "price": 8500
+  },
+  {
+    "name": "s\u1eefa h\u1ed9p TH (1 l\u1ed1c)",
+    "price": 32000
+  },
+  {
     "name": "s\u1eefa h\u1ed9p milo",
     "price": 7000
   },
@@ -334,6 +354,10 @@
   {
     "name": "s\u1eefa h\u1ed9p vinamilk",
     "price": 7500
+  },
+  {
+    "name": "s\u1eefa h\u1ed9p vinamilk (1 l\u1ed1c)",
+    "price": 30000
   },
   {
     "name": "s\u1eefa \u00f4ng th\u1ecd nh\u1ecf",
@@ -353,7 +377,7 @@
   },
   {
     "name": "thu\u1ed1c l\u00e1 3 s\u1ed1 Vi\u1ec7t (555 Vietnam)",
-    "price": 30000
+    "price": 32000
   },
   {
     "name": "thu\u1ed1c l\u00e1 COTAB",
@@ -389,7 +413,7 @@
   },
   {
     "name": "thu\u1ed1c l\u00e1 M\u00e8o \u0111\u1ecf (Craven Classic)",
-    "price": 20000
+    "price": 21000
   },
   {
     "name": "thu\u1ed1c l\u00e1 S\u00e0i G\u00f2n b\u1ea1c (Saigon silver)",
@@ -436,6 +460,14 @@
     "price": 10000
   },
   {
+    "name": "v\u1ec9 \u0111\u1ed3 ch\u01a1i",
+    "price": 10000
+  },
+  {
+    "name": "x\u00fac x\u00edch l\u1eafc (lon)",
+    "price": 10000
+  },
+  {
     "name": "x\u00fac x\u00edch teen (1 l\u1ed1c - 5 c\u00e2y)",
     "price": 23000
   },
@@ -453,6 +485,6 @@
   },
   {
     "name": "\u0111\u01b0\u1eddng ph\u00e8n",
-    "price": 12000
+    "price": 14000
   }
 ]

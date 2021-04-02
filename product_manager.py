@@ -75,7 +75,7 @@ class ProductManager:
             # when converting both of them into ascii chars
             score1 = fuzz.token_set_ratio(unidecode(keyword), unidecode(product_name))
 
-            # Similarity scrore between `keyword` and `product_name`
+            # Similarity score between `keyword` and `product_name`
             # when not converting them ino ascii chars
             score2 = fuzz.token_set_ratio(keyword, product_name, force_ascii=False)
 

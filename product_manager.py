@@ -184,7 +184,9 @@ class ProductManager:
         index = input("Enter product's index: ").strip()
         if not index.isnumeric():
             print("Invalid index")
-        else:
+
+        confirm_delete = input("Do you want to continue? [Y/n] ").strip().lower() == "y"
+        if confirm_delete:
             self.remove(int(index))
 
     def remove(self, index: int):

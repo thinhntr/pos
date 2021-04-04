@@ -62,4 +62,6 @@ if __name__ == "__main__":
             name = command
             product_manager.show(product_manager.search(command))
 
-    product_manager.save_to_file()
+    confirm_save = input("Do you want to save changes to the database? [Y/n] s").strip().lower() == "y"
+    if confirm_save:
+        product_manager.save_to_file()

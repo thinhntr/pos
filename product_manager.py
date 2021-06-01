@@ -37,34 +37,11 @@ class ProductManager:
         elif os.path.exists(DEFAULT_PRICELIST_PATH):
             self.load_from_file()
 
-    def get_products_names(self, indices: Optional[Iterable[int]] = None, is_sorted: bool = True) -> List[str]:
-        """
-        Returns
-        -------
-        List[str]
-            List of all products' names available if indices is None else
-            list of all products' names at indices
-        """
+    def get_products(self, indices: Optional[Iterable[int]] = None) -> List[Product]:
         if indices is None:
-            products = self.products.copy()
-            if is_sorted:
-                products.sort(key=lambda p: (p.name, p.price))
-            return [p.name for p in products]
+            indices = range(self.count)
 
-        return [self.products[i].name for i in indices]
-
-    def get_products_prices(self, indices: Optional[Iterable[int]] = None) -> List[int]:
-        """
-        Returns
-        -------
-        List[str]
-            List of all products' prices available if indices is None else
-            list of all products' prices at indices
-        """
-        if indices is None:
-            return [product.price for product in self.products]
-
-        return [self.products[i].price for i in indices]
+        return [self.products[i] for i in indices]
 
     def search(self, keyword: str) -> List[int]:
         """Search for product with name similar to `keyword`
@@ -105,22 +82,23 @@ class ProductManager:
 
         if len(similar_product_indices) == 0:
             self.products.append(Product(name, price))
+            return
 
+        similar_products = self.get_products(similar_product_indices)
+        similar_product_names = list(map(lambda p: p.name, similar_products))
+        choices = construct_poll(
+            [*similar_product_indices, "n"],
+            [*similar_product_names, "Add as new product"],
+        )
+
+        choice = get_choice(choices, "Similar products")
+
+        if choice == "n":
+            self.products.append(Product(name, price))
+        elif isinstance(choice, int):
+            self.modify_product(choice, name, price)
         else:
-            similar_product_names = self.get_products_names(similar_product_indices)
-            choices = construct_poll(
-                [*similar_product_indices, "n"],
-                [*similar_product_names, "Add as new product"],
-            )
-
-            choice = get_choice(choices, "Similar products")
-
-            if choice == "n":
-                self.products.append(Product(name, price))
-            elif isinstance(choice, int):
-                self.modify_product(choice, name, price)
-            else:
-                print("Skipped")
+            print("Skipped")
 
     def modify_product(
         self, index: int, new_name: str = "", new_price: Optional[int] = None

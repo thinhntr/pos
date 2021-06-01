@@ -37,7 +37,7 @@ class ProductManager:
         elif os.path.exists(DEFAULT_PRICELIST_PATH):
             self.load_from_file()
 
-    def get_products_names(self, indices: Optional[Iterable[int]] = None) -> List[str]:
+    def get_products_names(self, indices: Optional[Iterable[int]] = None, is_sorted: bool = True) -> List[str]:
         """
         Returns
         -------
@@ -46,7 +46,10 @@ class ProductManager:
             list of all products' names at indices
         """
         if indices is None:
-            return [product.name for product in self.products]
+            products = self.products.copy()
+            if is_sorted:
+                products.sort(key=lambda p: (p.name, p.price))
+            return [p.name for p in products]
 
         return [self.products[i].name for i in indices]
 
@@ -232,8 +235,6 @@ class ProductManager:
         """
         Save products' information from this instance to `filename`
         """
-        self.products.sort(key=lambda p: (p.name, p.price))
-
         with open(filename, "w") as price_list:
             json.dump(self.products, price_list, default=encode_product, indent=2)
             print(f"Data saved to {filename}")
